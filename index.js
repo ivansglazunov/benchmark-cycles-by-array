@@ -20,7 +20,9 @@ async.times(
       }
     });
 
-    var array = createArray(count);
+    var array = _.times(count, function(t) {
+      return t;
+    });
 
     suite.add('for-in', function() {
       for (var i in array) {}
