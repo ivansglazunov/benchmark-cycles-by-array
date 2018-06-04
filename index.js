@@ -4,7 +4,7 @@ var beauty = require('beautify-benchmark');
 var _ = require('lodash');
 var async = require('async');
 
-async.times(
+async.timesSeries(
   10,
   function(t, next) {
     var count = Math.pow(2, t);
