@@ -3,6 +3,7 @@ var tb = require('travis-benchmark');
 var beauty = require('beautify-benchmark');
 var _ = require('lodash');
 var async = require('async');
+var $ = require('jquery');
 
 async.timesSeries(
   10,
@@ -10,31 +11,46 @@ async.timesSeries(
     var count = Math.pow(2, t);
     var suite = new Benchmark.Suite(`${count} cycles`);
 
+    var array = _.times(count, function(t) {
+      return t;
+    });
+
     suite.add('for', function() {
-      for (var i = 0; i < count; i++) {};
+      for (var i = 0; i < count; i++) {
+        array[i];
+      };
     });
     suite.add('while', function() {
       var i = 0;
       while (i < count) {
         i++;
+        array[i];
       }
     });
-
-    var array = _.times(count, function(t) {
-      return t;
-    });
-
     suite.add('for-in', function() {
-      for (var i in array) {}
+      for (var i in array) {
+        array[i];
+      }
     });
     suite.add('for-of', function() {
-      for (var f of array) {}
+      for (var f of array) {
+        f;
+      }
     });
     suite.add('forEach', function() {
-      for (var f of array) {}
+      array.forEach(function(value, index) {
+        value;
+      });
     });
     suite.add('lodash.forEach', function() {
-      _.forEach(array, function() {});
+      _.forEach(array, function(value, index) {
+        value;
+      });
+    });
+    suite.add('$.each', function() {
+      $.each(array, function(index, value) {
+        value;
+      });
     });
 
     suite.on('cycle', function (event) { beauty.add(event.target); });
